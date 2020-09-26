@@ -1,17 +1,10 @@
 const state = {
-  reltype: null,
-  jprojname: null,
-  jrelname: null,
-  app: null,
-  classification: null,
-  relname: null,
-  relid: null,
-  secad: null,
-  accept: false,
-  asset: null,
-  spackage: null,
-  sversion: null,
-  apps: ["Test App1", "Test App2", "Test App3"],
+  apps: {
+    app1: "Test App1",
+    app2: "Test App2",
+    app3: "Test App3"
+  },
+  //   apps: ["Test App1", "Test App2", "Test App3"],
   types: [
     "Application - Code Change",
     "Infrastructure",
@@ -30,7 +23,9 @@ const mutations = {};
 const actions = {};
 
 const getters = {
-  tasks
+  apps: app => {
+    return state.apps;
+  }
 };
 
 export default {

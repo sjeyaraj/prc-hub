@@ -215,6 +215,9 @@ const inputCompValues = [
   }
 ];
 export default {
+computed:{
+
+}
   data() {
     return {
       reltype: null,

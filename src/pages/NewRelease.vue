@@ -4,8 +4,8 @@
       <q-toolbar-title>Create New Release</q-toolbar-title>
     </q-toolbar>
     <q-form @submit="onSubmit" @reset="onReset" class="q-mt-md q-gutter-sm">
-      <div class="row justify-evenly">
-        <div class="col-md-3">
+      <div class="row justify-between">
+        <div class="col-2">
           <div class="q-gutter-sm">
             <q-select
               filled
@@ -14,6 +14,16 @@
               label="Release Type"
               style="max-width: 300px"
               :rules="[val => (val && val.length > 0) || 'Select Release Type']"
+            />
+            <q-select
+              filled
+              v-model="app"
+              :options="Object.values(apps)"
+              label="Application"
+              :rules="[
+                val => (val && val.length > 0) || 'Select an Application'
+              ]"
+              style="max-width: 300px"
             />
             <q-select
               filled
@@ -33,16 +43,7 @@
               ]"
               style="max-width: 300px"
             />
-            <q-select
-              filled
-              v-model="app"
-              :options="apps"
-              label="Application"
-              :rules="[
-                val => (val && val.length > 0) || 'Select an Application'
-              ]"
-              style="max-width: 300px"
-            />
+
             <q-select
               filled
               v-model="classification"
@@ -125,13 +126,16 @@
           />
         </div>
         <div class="col-md-5">
-          <q-table
-            title="Integration / Hand-shake Testing "
-            dense
-            :data="data"
-            :columns="columns"
-            row-key="name"
-            hide-bottom
+          <IntegratedApps
+            v-if="
+              reltype === 'Application - Code Change' && app === 'Test App2'
+            "
+          />
+          <GoldenImages
+            v-if="
+              reltype === 'Application - Code Change' && app === 'Test App2'
+            "
+            class="q-pt-md"
           />
         </div>
       </div>
@@ -142,7 +146,10 @@
 </template>
 
 <script>
+import IntegratedApps from "components/IntegratedApps.vue";
+import GoldenImages from "components/GoldenImages.vue";
 export default {
+  components: { IntegratedApps, GoldenImages },
   data() {
     return {
       reltype: null,
@@ -153,10 +160,11 @@ export default {
       relname: null,
       relid: null,
       secad: null,
-      accept: false,
       asset: null,
       spackage: null,
       sversion: null,
+      snowid: null,
+      link: null,
       apps: ["Test App1", "Test App2", "Test App3"],
       types: [
         "Application - Code Change",
@@ -168,56 +176,7 @@ export default {
       jprojects: ["Cloud Migration", "Data Engineering", "App Services"],
       jrelnames: ["Cl_Mig_V1.0", "Cl_Mig_V2.0"],
       classifications: ["Class1", "Class2", "Class3", "Class4", "Class5"],
-      secads: ["Sec Adv1", "Sec Adv2", "Sec Adv3", "Sec Adv4"],
-      columns: [
-        {
-          name: "name",
-          required: true,
-          label: "Application Name",
-          align: "left",
-          field: row => row.name,
-          format: val => `${val}`,
-          sortable: true
-        },
-        {
-          name: "devTest",
-          align: "center",
-          label: "Dev Tested",
-          field: "devTest",
-          sortable: true
-        },
-        { name: "devVer", label: "Dev Ver", field: "devVer", sortable: true },
-        { name: "qaTest", label: "QA Tested", field: "qaTest" },
-        { name: "qaVer", label: "QA Ver", field: "qaVer" },
-        { name: "ctTest", label: "CT Tested", field: "ctTest" },
-        { name: "ctVer", label: "CT Ver", field: "ctVer" },
-        { name: "prTest", label: "Prod Tested", field: "prTest" },
-        { name: "prVer", label: "Prod Ver", field: "prVer" }
-      ],
-      data: [
-        {
-          name: "Integrated App1",
-          devTest: "True",
-          devVer: "1.0",
-          qaTest: "True",
-          qaVer: "4.0",
-          ctTest: "True",
-          ctVer: "2.0",
-          prTest: "NA",
-          prVer: "NA"
-        },
-        {
-          name: "Integrated App2",
-          devTest: "Yes",
-          devVer: "2.0",
-          qaTest: "True",
-          qaVer: "2.0",
-          ctTest: "No",
-          ctVer: "NA",
-          prTest: "NA",
-          prVer: "NA"
-        }
-      ]
+      secads: ["Sec Adv1", "Sec Adv2", "Sec Adv3", "Sec Adv4"]
     };
   },
 
@@ -249,8 +208,8 @@ export default {
       this.secad = null;
       this.relname = null;
       this.relid = null;
-      this.accept = false;
       this.jiraid = null;
+      this.snowid = null;
       this.asset = null;
       this.spackage = null;
       this.sversion = null;
