@@ -1,11 +1,11 @@
 <template>
   <div class="q-pa-md">
-    <q-toolbar class="bg-primary text-white">
+    <q-toolbar class="bg-secondary text-white">
       <q-toolbar-title>Create New Release</q-toolbar-title>
     </q-toolbar>
     <q-form @submit="onSubmit" @reset="onReset" class="q-mt-md q-gutter-sm">
       <div class="row justify-between">
-        <div class="col-2">
+        <div class="col-3">
           <div class="q-gutter-sm">
             <q-select
               filled
@@ -18,7 +18,7 @@
             <q-select
               filled
               v-model="app"
-              :options="Object.values(apps)"
+              :options="apps"
               label="Application"
               :rules="[
                 val => (val && val.length > 0) || 'Select an Application'
@@ -67,6 +67,59 @@
           </div>
         </div>
         <div class="col-md-3">
+          <div class="row">
+            <div class="col-7">
+              <q-input
+                filled
+                label="Release Date"
+                v-model="date"
+                mask="date"
+                :rules="['date']"
+                style="max-width: 250px"
+              >
+                <template v-slot:append>
+                  <q-icon name="event" class="cursor-pointer">
+                    <q-popup-proxy
+                      ref="qDateProxy"
+                      transition-show="scale"
+                      transition-hide="scale"
+                    >
+                      <q-date v-model="date">
+                        <div class="row items-center justify-end">
+                          <q-btn
+                            v-close-popup
+                            label="Close"
+                            color="primary"
+                            flat
+                          />
+                        </div>
+                      </q-date>
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
+            </div>
+            <div class="col-5 q-pl-md">
+              <q-input
+                filled
+                label="Time"
+                v-model="time"
+                style="max-width: 100px"
+              >
+                <template v-slot:append>
+                  <q-icon name="alarm" class="cursor-pointer">
+                    <q-popup-proxy
+                      ref="qDateProxy"
+                      transition-show="scale"
+                      transition-hide="scale"
+                    >
+                      <q-time v-model="time" />
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </q-input>
+            </div>
+          </div>
           <q-input
             filled
             v-model="relname"
@@ -96,6 +149,9 @@
             active-class="my-menu-link"
           >
             <q-item-section
+              v-if="
+                jprojname === 'Cloud Migration' && jrelname === 'Cl_Mig_V2.0'
+              "
               >Jira Link:
               https://jira.cloud/cli-release-all-issues</q-item-section
             >
@@ -116,29 +172,37 @@
             class="q-mt-md"
             filled
             v-model="spackage"
-            label="Software Package"
-          />
-          <q-input
-            class="q-mt-md"
-            filled
-            v-model="sversion"
-            label="Software Version"
+            label="Software Package / Software Version"
           />
         </div>
         <div class="col-md-5">
           <IntegratedApps
             v-if="
-              reltype === 'Application - Code Change' && app === 'Test App2'
+              reltype === 'Application - Code Change' && app === 'Test App1'
             "
           />
           <GoldenImages
             v-if="
-              reltype === 'Application - Code Change' && app === 'Test App2'
+              reltype === 'Application - Code Change' && app === 'Test App1'
             "
+            class="q-pt-md"
+          />
+          <JiraNotCertified
+            v-if="jprojname === 'Cloud Migration' && jrelname === 'Cl_Mig_V2.0'"
             class="q-pt-md"
           />
         </div>
       </div>
+      <TestResultSummary
+        v-if="jprojname === 'Cloud Migration' && jrelname === 'Cl_Mig_V2.0'"
+      />
+      <LatentDefects
+        v-if="jprojname === 'Cloud Migration' && jrelname === 'Cl_Mig_V2.0'"
+      />
+      <Suppressions />
+
+      <GoNoGoList />
+      <Approvals class="q-mb-sm" />
       <q-btn label="Submit" type="submit" color="primary" />
       <q-btn label="Reset" type="reset" color="primary" flat class="q-ml-sm" />
     </q-form>
@@ -146,12 +210,29 @@
 </template>
 
 <script>
-import IntegratedApps from "components/IntegratedApps.vue";
-import GoldenImages from "components/GoldenImages.vue";
+import IntegratedApps from "components/tables/IntegratedApps.vue";
+import GoldenImages from "components/tables/GoldenImages.vue";
+import JiraNotCertified from "components/tables/JiraNotCertified.vue";
+import TestResultSummary from "components/tables/TestResultSummary.vue";
+import LatentDefects from "components/tables/LatentDefects.vue";
+import Suppressions from "components/tables/Suppressions.vue";
+import GoNoGoList from "components/GoNoGoList.vue";
+import Approvals from "components/Approvals.vue";
 export default {
-  components: { IntegratedApps, GoldenImages },
+  components: {
+    IntegratedApps,
+    GoldenImages,
+    JiraNotCertified,
+    TestResultSummary,
+    LatentDefects,
+    Suppressions,
+    GoNoGoList,
+    Approvals
+  },
   data() {
     return {
+      date: "",
+      time: "",
       reltype: null,
       jprojname: null,
       jrelname: null,

@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpR fFf">
+  <q-layout view="hHh LpR fFf">
     <q-header elevated>
       <q-toolbar>
         <q-toolbar-title>
@@ -9,7 +9,7 @@
         <div class="q-mr-*">
           <q-toolbar-title>
             <q-icon class="q-pr-sm" name="account_circle" />
-            <span class="text-subtitle2">Stephen Joseph</span>
+            <span class="text-subtitle2">Welcome Mark!</span>
             <q-icon class="q-pl-sm" name="exit_to_app" />
           </q-toolbar-title>
         </div>
@@ -21,6 +21,7 @@
       show-if-above
       bordered
       content-class="bg-grey-1"
+      :width="200"
     >
       <q-list>
         <q-toolbar class="text-primary">
@@ -57,9 +58,15 @@ const linksData = [
     link: ""
   },
   {
+    title: "Add Release",
+    caption: "Create new Release",
+    icon: "create",
+    link: "/#/newRelease"
+  },
+  {
     title: "Approvals",
-    caption: "Tickets needs your attention",
-    icon: "check_box",
+    caption: "Certificates needs your attention",
+    icon: "thumb_up",
     link: "/#/approvals"
   },
   {
@@ -68,12 +75,7 @@ const linksData = [
     icon: "search",
     link: "/#/search"
   },
-  {
-    title: "Add Release",
-    caption: "Create new Release",
-    icon: "create",
-    link: "/#/newRelease"
-  },
+
   {
     title: "Release Calendar",
     caption: "Scheduled for the day",

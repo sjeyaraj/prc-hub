@@ -2,12 +2,14 @@
   <div>
     <q-table
       dense
+      class="my-sticky-header-table"
       :data="data"
       :columns="columns"
       row-key="id"
-      hide-bottom
       :filter="filter"
       :loading="loading"
+      virtual-scroll
+      style="height: 150px"
     >
       <template v-slot:top>
         <q-toolbar class="bg-primary text-white shadow-2">
@@ -17,13 +19,13 @@
             <q-tab
               name="tab1"
               :disable="loading"
-              label="Add App"
+              label="App ++"
               @click="addRow"
             />
             <q-tab
               name="tab2"
               :disable="loading"
-              label="Remove App"
+              label="App --"
               @click="removeRow"
             />
           </q-tabs>
@@ -171,11 +173,12 @@ export default {
       loading: false,
       filter: "",
       rowCount: 10,
+      tab: null,
       columns: [
         {
           name: "name",
           required: true,
-          label: "Application Name",
+          label: "App Name",
           align: "left",
           field: row => row.name,
           format: val => `${val}`,
@@ -184,36 +187,36 @@ export default {
         {
           name: "devTest",
           align: "center",
-          label: "Dev Tested",
+          label: "Dev Val",
           field: "devTest"
         },
-        { name: "devVer", label: "Dev Ver", field: "devVer", align: "center" },
+        { name: "devVer", label: "Dev V..", field: "devVer", align: "center" },
         {
           name: "qaTest",
-          label: "QA Tested",
+          label: "QA Val",
           field: "qaTest",
           align: "center"
         },
-        { name: "qaVer", label: "QA Ver", field: "qaVer", align: "center" },
+        { name: "qaVer", label: "QA V..", field: "qaVer", align: "center" },
         {
           name: "ctTest",
-          label: "CT Tested",
+          label: "CT Val",
           field: "ctTest",
           align: "center"
         },
-        { name: "ctVer", label: "CT Ver", field: "ctVer", align: "center" },
+        { name: "ctVer", label: "CT V..", field: "ctVer", align: "center" },
         {
           name: "prTest",
-          label: "Prod Tested",
+          label: "Pr Val",
           field: "prTest",
           align: "center"
         },
-        { name: "prVer", label: "Prod Ver", field: "prVer", align: "center" }
+        { name: "prVer", label: "Pr V..", field: "prVer", align: "center" }
       ],
       data: [
         {
           id: 1,
-          name: "Integrated App1",
+          name: "Test App1",
           devTest: "Yes",
           devVer: "1.0",
           qaTest: "Yes",
@@ -225,7 +228,7 @@ export default {
         },
         {
           id: 2,
-          name: "Integrated App2",
+          name: "Test App2",
           devTest: "Yes",
           devVer: "2.0",
           qaTest: "Yes",
@@ -237,28 +240,6 @@ export default {
         }
       ],
       original: [
-        {
-          name: "Integrated App1",
-          devTest: "Yes",
-          devVer: "1.0",
-          qaTest: "Yes",
-          qaVer: "4.0",
-          ctTest: "Yes",
-          ctVer: "2.0",
-          prTest: "Yes",
-          prVer: "1.0"
-        },
-        {
-          name: "Integrated App2",
-          devTest: "Yes",
-          devVer: "2.0",
-          qaTest: "Yes",
-          qaVer: "2.0",
-          ctTest: "NA",
-          ctVer: "NA",
-          prTest: "NA",
-          prVer: "NA"
-        },
         {
           name: "New App",
           devTest: "NA",

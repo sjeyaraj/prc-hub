@@ -6,7 +6,8 @@
       :data="data"
       :columns="columns"
       row-key="name"
-      hide-bottom
+      virtual-scroll
+      style="height: 150px"
     >
       <template v-slot:top>
         <q-toolbar class="bg-primary text-white shadow-2">
@@ -16,13 +17,13 @@
             <q-tab
               name="tab1"
               :disable="loading"
-              label="Add Image"
+              label="Image ++"
               @click="addRow"
             />
             <q-tab
               name="tab2"
               :disable="loading"
-              label="Remove Image"
+              label="Image --"
               @click="removeRow"
             />
           </q-tabs>
@@ -97,6 +98,7 @@ export default {
   name: "GoldenImages",
   data() {
     return {
+      tab: "",
       loading: false,
       filter: "",
       rowCount: 10,
@@ -104,7 +106,7 @@ export default {
         {
           name: "name",
           required: true,
-          label: "ID of Container Golden Image Used - Link",
+          label: "Golden Image ID",
           align: "left",
           field: row => row.name,
           format: val => `${val}`,
