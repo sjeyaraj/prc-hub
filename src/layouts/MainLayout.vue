@@ -41,7 +41,7 @@
     </q-page-container>
     <q-footer elevated class="bg-grey-8 text-white">
       <q-toolbar>
-        <small>Copyright 2020 Equifax, Inc.</small>
+        <small>Copyright 2020 Prc-hub, Inc.</small>
       </q-toolbar>
     </q-footer>
   </q-layout>
